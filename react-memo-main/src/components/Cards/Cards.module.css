@@ -70,3 +70,15 @@
 
   margin-bottom: -12px;
 }
+
+.mistakes{
+    border-radius: 12px;
+    background: #c2f5ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 12px;
+    font-family: StratosSkyeng;
+    padding: 6px;
+}
