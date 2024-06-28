@@ -1,11 +1,11 @@
 import { shuffle } from "lodash";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { generateDeck } from "../../utils/cards";
 import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
-import { DifficultyContext } from "../../contexts/DifficultyContext";
+import useDifficulty from "../../hooks/useDifficulty";
 
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
@@ -36,19 +36,21 @@ function getTimerValue(startDate, endDate) {
   };
 }
 
+/**
+ * Основной компонент игры, внутри него находится вся игровая механика и логика.
+ * pairsCount - сколько пар будет в игре
+ * previewSeconds - сколько секунд пользователь будет видеть все карты открытыми до начала игры
+ */
 export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
-  const { isEasy } = useContext(DifficultyContext);
   // В cards лежит игровое поле - массив карт и их состояние открыта\закрыта
   const [cards, setCards] = useState([]);
   // Текущий статус игры
   const [status, setStatus] = useState(STATUS_PREVIEW);
-  const [mistakes, setMistakes] = useState(0);
+
   // Дата начала игры
   const [gameStartDate, setGameStartDate] = useState(null);
   // Дата конца игры
   const [gameEndDate, setGameEndDate] = useState(null);
-
-  let isTop = !isEasy && pairsCount === 9 && status === STATUS_WON;
 
   // Стейт для таймера, высчитывается в setInteval на основе gameStartDate и gameEndDate
   const [timer, setTimer] = useState({
@@ -56,10 +58,14 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     minutes: 0,
   });
 
+  // Зависимость от чекбокса на начальной странице
+  const { mode } = useDifficulty();
+  // Состояние для количества попыток в начале игры
+  const [attempt, setAttempt] = useState(mode === "easy" ? 3 : 1);
+
   function finishGame(status = STATUS_LOST) {
     setGameEndDate(new Date());
     setStatus(status);
-    setMistakes(0);
   }
   function startGame() {
     const startDate = new Date();
@@ -67,14 +73,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameStartDate(startDate);
     setTimer(getTimerValue(startDate, null));
     setStatus(STATUS_IN_PROGRESS);
-    setMistakes(0);
   }
   function resetGame() {
+    setAttempt(mode === "easy" ? 3 : 1);
     setGameStartDate(null);
     setGameEndDate(null);
     setTimer(getTimerValue(null, null));
     setStatus(STATUS_PREVIEW);
-    setMistakes(0);
   }
 
   /**
@@ -125,30 +130,27 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
       return false;
     });
 
-    const playerLost = openCardsWithoutPair.length >= 2;
-    if (!playerLost) return;
+    const playerLost = attempt === 0;
+    if (openCardsWithoutPair.length >= 2) {
+      let needToClose = false;
+      openCardsWithoutPair.forEach(openCardWithoutPair => {
+        const foundCard = nextCards.find(card => card.id === openCardWithoutPair.id);
+        if (foundCard) {
+          needToClose = true;
+          foundCard.open = false;
+        }
+      });
 
-    if (isEasy && mistakes < 2) {
-      setMistakes(mistakes + 1);
-      setTimeout(() => {
-        const openCardsWithoutPairIds = openCardsWithoutPair.map(el => el.id);
-        console.log(openCardsWithoutPairIds);
-        setCards(
-          cards.map(el =>
-            openCardsWithoutPairIds.includes(el.id)
-              ? {
-                  ...el,
-                  open: false,
-                }
-              : el,
-          ),
-        );
-      }, 500);
-    } else {
+      if (needToClose) {
+        setAttempt(prevAttempt => prevAttempt - 1);
+        setCards([...nextCards]);
+      }
+    }
+
+    if (playerLost) {
       finishGame(STATUS_LOST);
       return;
     }
-
     // ... игра продолжается
   };
 
@@ -227,9 +229,9 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
           />
         ))}
       </div>
-      {isEasy === true ? (
-        <div>
-          <div className={styles.mistakes}> Количество ошибок: {mistakes}</div>
+      {mode === "easy" ? (
+        <div className={styles.attemptText}>
+          <div> Попытки: {attempt}</div>
         </div>
       ) : (
         <div></div>
@@ -238,7 +240,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
       {isGameEnded ? (
         <div className={styles.modalContainer}>
           <EndGameModal
-            isTop={isTop}
             isWon={status === STATUS_WON}
             gameDurationSeconds={timer.seconds}
             gameDurationMinutes={timer.minutes}

@@ -5,9 +5,10 @@ export async function getLeaders() {
     method: "GET",
   });
   if (response.status !== 200) {
-    throw new Error("Ошибка получения данных");
+    throw new Error("Невозможно получить список лидеров");
   } else {
     const data = await response.json();
+    console.log(data);
 
     return data;
   }
@@ -22,6 +23,6 @@ export async function addLeader({ name, time }) {
     const data = await response.json();
     return data;
   } else {
-    throw new Error("Ошибка получения данных");
+    throw new Error("Не удалось загрузить список лидеров, попробуйте снова");
   }
 }

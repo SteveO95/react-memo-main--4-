@@ -1,20 +1,21 @@
 import styles from "./EndGameModal.module.css";
-
 import { Button } from "../Button/Button";
-
+import useDifficulty from "../../hooks/useDifficulty";
 import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
 import { useEffect, useState } from "react";
 import { addLeader, getLeaders } from "../../api";
 import { Link } from "react-router-dom";
 
-export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick, isTop }) {
-  const [nameLeader, setNameLeader] = useState("");
+export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) {
+  const { level } = useDifficulty();
+  const [leader, setLeader] = useState("Пользователь23456");
   const gameTime = gameDurationMinutes * 60 + gameDurationSeconds;
-  const [newLeader, setNewLeader] = useState(false);
+  const [newLeader, setNewLeader] = useState(false); // меняем на true, если игрок окажется одним из лучших
 
   useEffect(() => {
-    if (isTop) {
+    if (+level === 9 && isWon) {
+      // если игрок выиграл 3 уровень сложности, получаем список лидеров
       getLeaders().then(({ leaders }) => {
         leaders = leaders.sort(function (a, b) {
           return a.time - b.time;
@@ -24,11 +25,11 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
         }
       });
     }
-  }, [gameTime, isTop]);
+  }, []);
 
-  function addPlayerToLeaders() {
+  function addPlayertoLeaders() {
     addLeader({
-      name: nameLeader || "Пользователь",
+      name: leader,
       time: gameTime,
     })
       .then(({ leaders }) => {
@@ -56,7 +57,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
             placeholder={"Введите ваше имя"}
             className={styles.inputText}
             onChange={e => {
-              setNameLeader(e.target.value);
+              setLeader(e.target.value);
             }}
           />
           <p className={styles.description}>Затраченное время:</p>
@@ -65,7 +66,8 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
           </div>
           <Button
             onClick={() => {
-              addPlayerToLeaders();
+              addPlayertoLeaders();
+              onClick();
             }}
           >
             Начать снова
@@ -74,8 +76,8 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
             to="/leaderboard"
             className={styles.linkBoard}
             onClick={() => {
-              addPlayerToLeaders();
-              //But
+              addPlayertoLeaders();
+              onClick();
             }}
           >
             Перейти к лидерборду

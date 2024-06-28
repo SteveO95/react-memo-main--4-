@@ -1,15 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
-import { useContext, useState } from "react";
-import { DifficultyContext } from "../../contexts/DifficultyContext";
+import { Checkbox } from "../../components/Checkbox/Checkbox";
+import { Button } from "../../components/Button/Button";
+import { Link, useNavigate } from "react-router-dom";
+import useDifficulty from "../../hooks/useDifficulty";
 
 export function SelectLevelPage() {
-  const { isEasy, setIsEasy } = useContext(DifficultyContext);
-  const [level, setLevel] = useState(null);
+  const { mode, changeMode, level, setLevel } = useDifficulty();
   const navigate = useNavigate();
 
-  const startGame = () => {
-    navigate(`/game/${level}`);
+  const handlePlayClick = () => {
+    navigate(`/game/${level}`, { state: { mode } });
+    console.log(mode);
   };
 
   return (
@@ -32,20 +33,10 @@ export function SelectLevelPage() {
             <div className={styles.levelText}>3</div>
           </label>
         </form>
-        <div className={styles.checkbox}>
-          <span>Легкий режим (3 жизни) </span>
-          <input type="checkbox" checked={isEasy} onChange={() => setIsEasy(!isEasy)} />
-        </div>
-        {level === null ? (
-          <button className={styles.button} disabled>
-            Начать игру
-          </button>
-        ) : (
-          <button className={styles.button} onClick={startGame}>
-            Начать игру
-          </button>
-        )}
-
+        <Checkbox className={styles.mode} onClick={changeMode}>
+          Легкий режим (3 жизни)
+        </Checkbox>
+        {level === null ? <button disabled>Играть</button> : <Button onClick={handlePlayClick}>Играть</Button>}
         <Link to="/leaderboard" className={styles.linkBoard}>
           Перейти к лидерборду
         </Link>
