@@ -21,31 +21,33 @@ export function LeaderBoardPage() {
       });
   }, []);
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <p className={styles.text}>Лидерборд</p>
-        <Link to="/">
-          <Button>Начать игру</Button>
-        </Link>
-      </div>
-      <table>
-        <thead className={styles.th}>
-          <tr className={styles.leaders}>
-            <th>Позиция</th>
-            <th>Пользователь</th>
-            <th>Время</th>
-          </tr>
-        </thead>
-        <tbody className={styles.tbody}>
-          {leaders.map((leader, index) => (
-            <tr className={styles.sleader} key={leader.id}>
-              <td>#{index + 1}</td>
-              <td>{leader.name}</td>
-              <td>{leader.time}</td>
+    <>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <p className={styles.text}>Лидерборд</p>
+          <Link to="/game/9">
+            <Button>Начать игру</Button>
+          </Link>
+        </div>
+        <table>
+          <thead className={styles.thead}>
+            <tr className={styles.leaderboard}>
+              <th className={styles.position}>Позиция</th>
+              <th className={styles.user}>Пользователь</th>
+              <th className={styles.time}>Время</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody className={styles.tbody}>
+            {leaders.map((leader, index) => (
+              <tr className={styles.leader} key={leader.id}>
+                <td className={styles.position}>#{index + 1}</td>
+                <td className={styles.user}>{leader.name}</td>
+                <td className={styles.time}>{leader.time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }

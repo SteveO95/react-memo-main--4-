@@ -73,11 +73,36 @@ input[type="radio"]:checked + div{
   background: #0080c1;
   color: #fff;
 }
+/* изменения цвета */
+.levelSelected {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 97px;
+  height: 98px;
+  flex-shrink: 0;
 
-.level:active {
-  background: #0080c1;
-  color: #fff;
+  border-radius: 12px;
+  background: #fff;
+
+  color: #0080c1;
+  text-align: center;
+  font-family: StratosSkyeng;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 72px;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
 }
+
+.levelSelected {
+  background-color: #0080c1; 
+  color: azure;
+}
+
 
 .mode {
   display: flex;
