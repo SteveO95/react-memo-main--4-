@@ -1,11 +1,15 @@
 .container {
-  width: 686px;
-  margin: 50px auto;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  /* gap: 40px; */
+  max-height: 100vh;
+  box-sizing: border-box;
 }
 
 .header {
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
   justify-content: space-between;
   padding-bottom: 40px;
 
@@ -21,9 +25,9 @@
 }
 
 .leaderboard {
-  width: 686px;
+  /* width: 686px; */
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
   justify-content: space-between;
   align-items: center;
   height: 48px;
@@ -43,7 +47,7 @@
 
 
 .position {
-  width: 100px;
+  width: 80px;
   text-align: left;
 
 }
