@@ -5,6 +5,7 @@
   /* gap: 40px; */
   max-height: 100vh;
   box-sizing: border-box;
+  
 }
 
 .header {
@@ -12,7 +13,7 @@
   /* flex-direction: row; */
   justify-content: space-between;
   padding-bottom: 40px;
-
+  
 }
 
 .text {
@@ -35,6 +36,7 @@
   border-radius: 12px;
   padding: 16px 20px;
   box-sizing: border-box;
+  margin-bottom: 8px;
 }
 
 .leaderboard th {
@@ -43,6 +45,7 @@
   font-size: 20px;
   line-height: 133%;
   color: #999;
+  
 }
 
 
@@ -66,7 +69,7 @@
 .tbody {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .leader {
