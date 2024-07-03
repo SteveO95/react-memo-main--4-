@@ -5,6 +5,7 @@ import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
+import useDifficulty from "../../hooks/useDifficulty";
 
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
@@ -57,6 +58,11 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     minutes: 0,
   });
 
+  // Зависимость от чекбокса на начальной странице
+  const { mode } = useDifficulty();
+  // Состояние для количества попыток в начале игры
+  const [attempt, setAttempt] = useState(mode === "easy" ? 3 : 1);
+
   function finishGame(status = STATUS_LOST) {
     setGameEndDate(new Date());
     setStatus(status);
@@ -69,6 +75,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setStatus(STATUS_IN_PROGRESS);
   }
   function resetGame() {
+    setAttempt(mode === "easy" ? 3 : 1);
     setGameStartDate(null);
     setGameEndDate(null);
     setTimer(getTimerValue(null, null));
@@ -123,14 +130,27 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
       return false;
     });
 
-    const playerLost = openCardsWithoutPair.length >= 2;
+    const playerLost = attempt === 0;
+    if (openCardsWithoutPair.length >= 2) {
+      let needToClose = false;
+      openCardsWithoutPair.forEach(openCardWithoutPair => {
+        const foundCard = nextCards.find(card => card.id === openCardWithoutPair.id);
+        if (foundCard) {
+          needToClose = true;
+          foundCard.open = false;
+        }
+      });
 
-    // "Игрок проиграл", т.к на поле есть две открытые карты без пары
+      if (needToClose) {
+        setAttempt(prevAttempt => prevAttempt - 1);
+        setCards([...nextCards]);
+      }
+    }
+
     if (playerLost) {
       finishGame(STATUS_LOST);
       return;
     }
-
     // ... игра продолжается
   };
 
@@ -209,6 +229,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
           />
         ))}
       </div>
+      {mode === "easy" ? (
+        <div className={styles.attemptText}>
+          <div> Попытки: {attempt}</div>
+        </div>
+      ) : (
+        <div></div>
+      )}
 
       {isGameEnded ? (
         <div className={styles.modalContainer}>
