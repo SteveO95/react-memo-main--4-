@@ -1,4 +1,4 @@
-const leaderboardURL = "https://wedev-api.sky.pro/api/leaderboard";
+const leaderboardURL = "https://wedev-api.sky.pro/api/v2/leaderboard";
 
 export async function getLeaders() {
   const response = await fetch(leaderboardURL, {
@@ -14,10 +14,10 @@ export async function getLeaders() {
   }
 }
 
-export async function addLeader({ name, time }) {
+export async function addLeader({ name, time, achievements }) {
   const response = await fetch(leaderboardURL, {
     method: "POST",
-    body: JSON.stringify({ name, time }),
+    body: JSON.stringify({ name, time, achievements }),
   });
   if (response.status === 201) {
     const data = await response.json();

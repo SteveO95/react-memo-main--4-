@@ -20,6 +20,7 @@ export function LeaderBoardPage() {
         console.log(error.message);
       });
   }, []);
+
   return (
     <>
       <div className={styles.container}>
@@ -34,6 +35,7 @@ export function LeaderBoardPage() {
             <tr className={styles.leaderboard}>
               <th className={styles.position}>Позиция</th>
               <th className={styles.user}>Пользователь</th>
+              <th className={styles.achievements}>Достижения</th>
               <th className={styles.time}>Время</th>
             </tr>
           </thead>
@@ -42,6 +44,26 @@ export function LeaderBoardPage() {
               <tr className={styles.leader} key={leader.id}>
                 <td className={styles.position}>#{index + 1}</td>
                 <td className={styles.user}>{leader.name}</td>
+                <td className={styles.achievements}>
+                  {leader.achievements && (
+                    <div className={styles.block_achievements}>
+                      {leader.achievements.includes(1) ? (
+                        <button className={styles.puzzle} hint1="Игра пройдена в сложном режиме"></button>
+                      ) : (
+                        <button className={styles.puzzleGray} hint1="Игра пройдена в сложном режиме"></button>
+                      )}
+                    </div>
+                  )}
+                  {leader.achievements && (
+                    <div className={styles.block_achievements}>
+                      {leader.achievements.includes(2) ? (
+                        <button className={styles.vision} hint2="Игра пройдена без супер-сил"></button>
+                      ) : (
+                        <button className={styles.visionGray} hint2="Игра пройдена без супер-сил"></button>
+                      )}
+                    </div>
+                  )}
+                </td>
                 <td className={styles.time}>{leader.time}</td>
               </tr>
             ))}
