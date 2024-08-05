@@ -15,6 +15,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 20px;
+}
+
+.easyMode {
+  width: 20px;
+}
+
+.easyModeText {
+  user-select: none;
 }
 
 .title {
@@ -32,115 +41,35 @@
   display: flex;
   flex-direction: row;
   gap: 26px;
-  margin-top: 48px;
-  margin-bottom: 28px;
 }
 
 .level {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 97px;
   height: 98px;
-  flex-shrink: 0;
-
-  border-radius: 12px;
-  background: #fff;
-
-  color: #0080c1;
-  text-align: center;
-  font-family: StratosSkyeng;
-  font-size: 64px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 72px;
-  text-decoration: none;
-  position: relative;
-  cursor: pointer;
-}
-
-.levelText {
-  position: relative;
-  z-index: 1;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:checked + div{
-  background: #0080c1;
-  color: #fff;
-}
-/* изменения цвета */
-.levelSelected {
-  display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  width: 97px;
-  height: 98px;
   flex-shrink: 0;
-
   border-radius: 12px;
   background: #fff;
-
-  color: #0080c1;
-  text-align: center;
-  font-family: StratosSkyeng;
-  font-size: 64px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 72px;
-  text-decoration: none;
-  position: relative;
   cursor: pointer;
+  color: #0080c1;
+  font-size: 64px;
+  font-family: StratosSkyeng;
+  text-align: center;
 }
 
-.levelSelected {
-  background-color: #0080c1; 
-  color: azure;
+.selected {
+  background: rgba(139, 215, 9, 0.4);
 }
 
-
-.mode {
+.modeContainer {
   display: flex;
-  flex-direction: row;
-  gap: 15px;
-}
-
-.linkBoard {
-  padding-top: 20px;
+  flex-flow: row nowrap;
+  gap: 4px;
   color: #004980;
-  text-decoration: underline;
-  font-weight: 400;
-  font-size: 18px;
-  font-family: "Roboto", sans-serif;
-}
-
-.linkBoard:hover {
-color:#000;
-}
-
-button {
-  width: 246px;
-  height: 48px;
-
-  border-radius: 12px;
-  background: gray;
-
-  color: #fff;
   text-align: center;
   font-variant-numeric: lining-nums proportional-nums;
-
   font-family: StratosSkyeng;
   font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 32px; /* 133.333% */
-
-  border: none;
-
-  cursor: pointer;
 }
