@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLeaderBoard } from "../api";
+import { getLeaderboard } from "../api";
 
 export const useLeaderboard = () => {
   const [leaders, setLeaders] = useState([]);
@@ -8,7 +8,7 @@ export const useLeaderboard = () => {
   useEffect(() => {
     const fetchLeaders = async () => {
       try {
-        const data = await getLeaderBoard();
+        const data = await getLeaderboard();
         const rawLeaders = data.leaders.sort((a, b) => a.time - b.time);
         setLeaders(rawLeaders.slice(0, 10));
       } catch (err) {

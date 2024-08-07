@@ -1,4 +1,4 @@
-export async function getLeaderBoard() {
+export async function getLeaderboard() {
   let result = await fetch(`https://wedev-api.sky.pro/api/v2/leaderboard`);
 
   if (!result.ok) {
