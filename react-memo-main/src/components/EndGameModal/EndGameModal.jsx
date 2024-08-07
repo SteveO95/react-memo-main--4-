@@ -1,99 +1,110 @@
 import styles from "./EndGameModal.module.css";
+
 import { Button } from "../Button/Button";
-import useDifficulty from "../../hooks/useDifficulty";
+
 import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
-import { useEffect, useState } from "react";
-import { addLeader, getLeaders } from "../../api";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { setLeader } from "../../api";
 
-export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) {
-  const { level } = useDifficulty();
-  const [leader, setLeader] = useState("Пользователь23456");
-  const gameTime = gameDurationMinutes * 60 + gameDurationSeconds;
-  const [newLeader, setNewLeader] = useState(false); // меняем на true, если игрок окажется одним из лучших
+import Icon from "../Icon/Icon";
+import { sanitizeValue } from "../../utils/sanitizeValue";
 
-  useEffect(() => {
-    if (+level === 9 && isWon) {
-      // если игрок выиграл 3 уровень сложности, получаем список лидеров
-      getLeaders().then(({ leaders }) => {
-        leaders = leaders.sort(function (a, b) {
-          return a.time - b.time;
-        });
-        if (leaders.length < 10 || gameTime < leaders[9].time) {
-          setNewLeader(true);
-        }
-      });
-    }
-  }, []);
+export function EndGameModal({
+  isWon,
+  isLeaderboard,
+  gameDurationSeconds,
+  gameDurationMinutes,
+  isOneLive = false,
+  isWithoutPower = false,
+  onClick,
+}) {
+  const [userName, setUserName] = useState("");
+  const [dataSave, setDataSave] = useState(false);
+  const navigate = useNavigate();
 
-  function addPlayertoLeaders() {
-    addLeader({
-      name: leader,
-      time: gameTime,
-    })
-      .then(({ leaders }) => {
-        console.log(leaders);
-      })
-      .catch(error => {
-        alert(error.message);
-      });
-  }
-
-  const title = isWon ? (newLeader ? "Вы попали на Лидерборд!" : "Вы победили!") : "Вы проиграли!";
+  const title = isLeaderboard && isWon ? "Вы попали на лидерборд!" : isWon ? "Вы победили!" : "Вы проиграли!";
 
   const imgSrc = isWon ? celebrationImageUrl : deadImageUrl;
 
   const imgAlt = isWon ? "celebration emodji" : "dead emodji";
 
+  const saveResult = async onClick => {
+    if (!isWon || !isLeaderboard) {
+      onClick();
+      return;
+    }
+    const clearUserName = sanitizeValue(userName);
+    if (clearUserName.length < 1) {
+      alert("Пожалуйста, укажите имя прежде чем продолжить");
+      return;
+    }
+
+    if (dataSave) {
+      onClick();
+      return;
+    }
+
+    try {
+      let achievements = [];
+      if (isOneLive) achievements.push(1);
+      if (isWithoutPower) achievements.push(2);
+
+      await setLeader({
+        name: clearUserName,
+        time: parseInt(gameDurationMinutes * 60 + gameDurationSeconds),
+        achievements: achievements,
+      });
+      setDataSave(true);
+      onClick();
+    } catch (e) {
+      let err = e instanceof Error ? e.message : "Ошибка записи!";
+      alert(`${err}\nПопробуйте снова!`);
+    }
+  };
+
   return (
-    <>
-      {newLeader ? (
-        <div className={styles.modalLeader}>
-          <img className={styles.image} src={imgSrc} alt={imgAlt} />
-          <h2 className={styles.titleLeader}>{title}</h2>
+    <div className={styles.modal}>
+      <img className={styles.image} src={imgSrc} alt={imgAlt} />
+      <h2 className={styles.title}>{title}</h2>
+      {isLeaderboard && isWon && (
+        <div>
           <input
             type="text"
-            placeholder={"Введите ваше имя"}
-            className={styles.inputText}
-            onChange={e => {
-              setLeader(e.target.value);
-            }}
+            placeholder="Ваше имя"
+            className={styles.leaderName}
+            value={userName}
+            onChange={e => setUserName(e.target.value)}
+            disabled={dataSave}
           />
-          <p className={styles.description}>Затраченное время:</p>
-          <div className={styles.time}>
-            {gameDurationMinutes.toString().padStart("2", "0")}.{gameDurationSeconds.toString().padStart("2", "0")}
-          </div>
-          <Button
-            onClick={() => {
-              addPlayertoLeaders();
-              onClick();
-            }}
-          >
-            Начать снова
-          </Button>
-          <Link
-            to="/leaderboard"
-            className={styles.linkBoard}
-            onClick={() => {
-              addPlayertoLeaders();
-              onClick();
-            }}
-          >
-            Перейти к лидерборду
-          </Link>
-        </div>
-      ) : (
-        <div className={styles.modal}>
-          <img className={styles.image} src={imgSrc} alt={imgAlt} />
-          <h2 className={styles.title}>{title}</h2>
-          <p className={styles.description}>Затраченное время:</p>
-          <div className={styles.time}>
-            {gameDurationMinutes.toString().padStart("2", "0")}.{gameDurationSeconds.toString().padStart("2", "0")}
-          </div>
-          <Button onClick={onClick}>Начать сначала</Button>
         </div>
       )}
-    </>
+      <p className={styles.description}>Затраченное время:</p>
+      <div className={styles.time}>
+        {gameDurationMinutes.toString().padStart("2", "0")}.{gameDurationSeconds.toString().padStart("2", "0")}
+      </div>
+
+      <div className={styles.buttonsContainer}>
+        {isLeaderboard && isWon && (
+          <>
+            <Button
+              onClick={() =>
+                saveResult(() => {
+                  return;
+                })
+              }
+            >
+              <Icon iconName={dataSave ? "thumb_up" : "save"} width={"20px"} height={"20px"} color={"#fff"} />
+              {dataSave ? "Сохранено" : "Сохранить"}
+            </Button>
+            <Button onClick={() => saveResult(() => navigate("/leaderboard"))}>К лидерборду</Button>
+          </>
+        )}
+
+        <Button onClick={() => saveResult(onClick)}>Начать сначала</Button>
+        <Button onClick={() => saveResult(() => navigate("/"))}>На главную</Button>
+      </div>
+    </div>
   );
 }

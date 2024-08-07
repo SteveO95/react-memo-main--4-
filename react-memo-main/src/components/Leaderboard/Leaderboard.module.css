@@ -1,0 +1,64 @@
+.leaderboardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 200px);
+  border-radius: 12px;
+  padding-right: 4px;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #7ac100;
+  border-radius: 4px;
+}
+
+.leaderboardCard {
+  display: grid;
+  gap: 66px;
+  grid-template-columns: 100px 1fr 170px 100px;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 12px;
+  font-size: 24px;
+}
+
+.leaderboardText {
+  font-family: StratosSkyeng;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0%;
+  user-select: none;
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.leaderboardAchivments {
+  display: flex;
+  gap: 6px;
+}
+
+.leaderboardCardTitle {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin-bottom: 20px;
+  margin-right: 4px;
+}
+
+.leaderboardTitleText {
+  color: rgb(153, 153, 153);
+}
+
+@media (max-width: 1024px) {
+  .leaderboardCard {
+    gap: 8px;
+  }
+}

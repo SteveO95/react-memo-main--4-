@@ -3,12 +3,13 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
-import { DifficultyProvider } from "./contexts/DifficultyContext";
+import LivesProviders from "./providers/LivesProviders";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <DifficultyProvider>
+    <LivesProviders value={1}>
       <RouterProvider router={router}></RouterProvider>
-    </DifficultyProvider>
+    </LivesProviders>
   </React.StrictMode>,
 );
