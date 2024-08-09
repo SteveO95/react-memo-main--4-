@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { serializeTrackTime } from "../../utils/serializeTrackTime";
-import styles from "./Leaderboard.module.css";
-import { useLeaderboard } from "../../hooks/useLeaderboard";
 import Icon from "../../components/Icon/Icon";
+import { useLeaderboard } from "../../hooks/useLeaderboard";
+import { serializeTrackTime } from "../../utils/serializeTrackTime";
 import Tooltip from "../Tooltip/Tooltip";
+import styles from "./Leaderboard.module.css";
 
 const achivments = [
   { id: 1, message: "Игра пройдена в сложном режиме", earned: "puzzle-color", failed: "puzzle-shape" },
