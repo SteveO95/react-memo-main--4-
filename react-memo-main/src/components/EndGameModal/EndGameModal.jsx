@@ -2,14 +2,14 @@ import styles from "./EndGameModal.module.css";
 
 import { Button } from "../Button/Button";
 
-import deadImageUrl from "./images/dead.png";
-import celebrationImageUrl from "./images/celebration.png";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { setLeader } from "../../api";
+import celebrationImageUrl from "./images/celebration.png";
+import deadImageUrl from "./images/dead.png";
 
-import Icon from "../Icon/Icon";
 import { sanitizeValue } from "../../utils/sanitizeValue";
+import Icon from "../Icon/Icon";
 
 export function EndGameModal({
   isWon,
