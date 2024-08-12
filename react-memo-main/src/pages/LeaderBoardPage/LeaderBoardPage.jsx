@@ -1,7 +1,7 @@
-import { Button } from "../../components/Button/Button";
 import { Link } from "react-router-dom";
-import styles from "./LeaderboardPage.module.css";
+import { Button } from "../../components/Button/Button";
 import Leaderboard from "../../components/Leaderboard/Leaderboard";
+import styles from "./LeaderboardPage.module.css";
 
 const LeaderboardPage = () => {
   return (
