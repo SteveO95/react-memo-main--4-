@@ -19,3 +19,4 @@ const LeaderboardPage = () => {
   );
 };
 export default LeaderboardPage;
+// 3 по 5 ;
