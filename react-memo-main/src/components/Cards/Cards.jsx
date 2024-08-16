@@ -1,13 +1,13 @@
+import classNames from "classnames";
 import { shuffle } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { generateDeck } from "../../utils/cards";
-import styles from "./Cards.module.css";
-import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
+import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
+import { generateDeck } from "../../utils/cards";
 import { getTimerValue } from "../../utils/getTimerValue";
 import Icon from "../Icon/Icon";
-import classNames from "classnames";
+import styles from "./Cards.module.css";
 
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
@@ -313,9 +313,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 1, lives = 1 }) {
               onClick={() => {
                 finishGame(STATUS_WON);
               }}
-            >
-              WIN
-            </Button>
+            ></Button>
 
             <div className={styles.headerContainer}>
               <div className={styles.gameLives}>{hearts}</div>
