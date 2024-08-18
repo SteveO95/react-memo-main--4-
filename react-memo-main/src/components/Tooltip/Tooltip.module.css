@@ -1,0 +1,35 @@
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipText {
+  box-sizing: border-box;
+  font-family: StratosSkyeng;
+  font-size: 18px;
+  visibility: hidden;
+  width: 180px;
+  background-color: #c2f5ff;
+  color: #004980;
+  text-align: center;
+  border-radius: 12px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 140%;
+  left: -15%;
+}
+
+.tooltip .tooltipText::after {
+  content: "";
+  position: absolute;
+  top: 90%;
+  left: 8%;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #c2f5ff transparent transparent #c2f5ff;
+}
+
+.tooltip:hover .tooltipText {
+  visibility: visible;
+}

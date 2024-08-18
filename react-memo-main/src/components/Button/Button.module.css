@@ -24,7 +24,3 @@
 .button:hover {
   background: #7ac100cc;
 }
-
-.button:disabled {
-  background-color: gray;
-}

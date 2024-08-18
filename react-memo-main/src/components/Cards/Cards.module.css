@@ -23,6 +23,7 @@
   justify-content: center;
   align-items: center;
   background: #004980c0;
+  overflow: auto;
 }
 
 .header {
@@ -30,6 +31,13 @@
   justify-content: space-between;
   align-items: end;
   margin-bottom: 35px;
+}
+
+.headerContainer {
+  gap: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
 }
 
 .timer {
@@ -71,10 +79,69 @@
   margin-bottom: -12px;
 }
 
-.attemptText {
-  font-size: 24px;
-  line-height: 18px;
-  padding-top: 30px;
-  color: #fff;
+.powers {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 8px;
+}
+
+.powerTooltip {
+  position: relative;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.powerTooltipText {
+  display: none;
+  position: absolute;
+  cursor: default;
+  background: #c2f5ff;
+  color: #004980;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 24px;
   font-family: StratosSkyeng;
+  z-index: 3;
+  width: 222px;
+}
+
+.powerTooltipOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 73, 128, 0.6);
+  z-index: 1;
+}
+
+.powerTooltip:hover .powerTooltipText {
+  display: block;
+}
+
+.powerTooltip:hover ~ .powerTooltipOverlay {
+  display: block;
+}
+
+.powerUsed {
+  filter: grayscale(1);
+}
+
+.gameLives {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 4px;
+  width: 170px;
+  justify-content: center;
+}
+
+.live {
+  width: 50px;
+  height: 50px;
 }
