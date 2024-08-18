@@ -309,12 +309,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 1, lives = 1 }) {
               <div className={styles.powerTooltipOverlay}></div>
             </div>
 
-            <Button
-              onClick={() => {
-                finishGame(STATUS_WON);
-              }}
-            ></Button>
-
             <div className={styles.headerContainer}>
               <div className={styles.gameLives}>{hearts}</div>
               <Button onClick={resetGame}>Начать заново</Button>
